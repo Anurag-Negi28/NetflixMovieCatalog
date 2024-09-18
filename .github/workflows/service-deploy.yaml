@@ -24,6 +24,7 @@ jobs:
 
       - name: Ensure the app directory exists on EC2
         run: |
+          ssh -i mykey.pem -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP "mkdir -p ~/app"
 
           # Copy the files from the current work dir into the EC2 instance, under ~/app.
           scp -o StrictHostKeyChecking=no -i mykey.pem -r * ubuntu@$EC2_PUBLIC_IP:~/app
