@@ -1,8 +1,15 @@
-# TODO your deploy script implementation...
 #!/bin/bash
 
+# TODO your deploy script implementation...
+
 # Change to the app directory
-cd /home/anurag/Devops_Bootcamp/NetflixMovieCatalog || exit
+if [ ! -d "~/app" ]; then
+  mkdir -p ~/app
+else
+  echo "Directory ~/app already exists."
+fi
+
+cd ~/app || exit
 
 # Pull the latest changes from the repo (optional, depends on your workflow)
 # git pull origin main
@@ -13,7 +20,7 @@ if [ ! -d "venv" ]; then
 fi
 
 # Activate the virtual environment
-source venv/bin/activate
+source myenv/bin/activate
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -23,7 +30,7 @@ pip install -r requirements.txt
 
 # Restart the Flask app service using systemd
 sudo systemctl daemon-reload  # Reload systemd to detect changes in the service file (if any)
-sudo systemctl restart uwsgi-flask.service  # Replace 'my_app.service' with your actual service name
+sudo systemctl start uwsgi-flask.service  # Replace 'my_app.service' with your actual service name
 
 # Optionally, check the status of the service to ensure it's running
 sudo systemctl status uwsgi-flask.service
