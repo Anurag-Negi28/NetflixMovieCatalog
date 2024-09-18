@@ -1,15 +1,13 @@
 #!/bin/bash
 
-# TODO your deploy script implementation...
-
-# Change to the app directory
-if [ ! -d "~/app" ]; then
-  mkdir -p ~/app
+# Check if the app directory exists, create it if it doesn't
+if [ ! -d "/home/ubuntu/app" ]; then
+  mkdir -p /home/ubuntu/app
 else
-  echo "Directory ~/app already exists."
+  echo "Directory /home/ubuntu/app already exists."
 fi
 
-cd ~/app || exit
+cd /home/ubuntu/app || exit
 
 # Pull the latest changes from the repo (optional, depends on your workflow)
 # git pull origin main
@@ -20,7 +18,7 @@ if [ ! -d "venv" ]; then
 fi
 
 # Activate the virtual environment
-source myenv/bin/activate
+source venv/bin/activate
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -30,7 +28,7 @@ pip install -r requirements.txt
 
 # Restart the Flask app service using systemd
 sudo systemctl daemon-reload  # Reload systemd to detect changes in the service file (if any)
-sudo systemctl start NetflixMovieCatalog.service  # Replace 'my_app.service' with your actual service name
+sudo systemctl start NetflixMovieCatalog.service  # Replace 'NetflixMovieCatalog.service' with your actual service name
 
 # Optionally, check the status of the service to ensure it's running
 sudo systemctl status NetflixMovieCatalog.service

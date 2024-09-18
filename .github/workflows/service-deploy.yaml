@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  EC2_PUBLIC_IP: 51.21.127.116  # TODO replace to your EC2 instance public IP
+  EC2_PUBLIC_IP: 51.21.127.116  # TODO replace this with your EC2 instance public IP
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # TODO define this secret in your GitHub repo settings
 
 jobs:
@@ -17,24 +17,17 @@ jobs:
       - name: Checkout the app code
         uses: actions/checkout@v2
 
-      - name: SSH to EC2 instance
+      - name: SSH to EC2 instance and ensure the app directory exists
         run: |
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 600 mykey.pem
 
-      - name: Ensure the app directory exists on EC2
-        run: |
-          ssh -i mykey.pem -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP "mkdir -p ~/app"
+          # Ensure the app directory exists on EC2
+          ssh -i mykey.pem -o StrictHostKeyChecking=no ubuntu@${{ env.EC2_PUBLIC_IP }} "mkdir -p /home/ubuntu/app"
 
-          # Copy the files from the current work dir into the EC2 instance, under ~/app.
-          scp -o StrictHostKeyChecking=no -i mykey.pem -r * ubuntu@$EC2_PUBLIC_IP:~/app
+          # Copy the files to the EC2 instance under /home/ubuntu/app
+          scp -o StrictHostKeyChecking=no -i mykey.pem -r * ubuntu@${{ env.EC2_PUBLIC_IP }}:/home/ubuntu/app
 
-          # Connect to your EC2 instance and execute the deploy.sh script (this script is part of the repo files).
-          # TODO You need to implement the deploy.sh script yourself.
-          #
-          # Upon completion, the NetflixMovieCatalog app should be running with its newer version.
-          # To keep the app running in the background independently on the terminal session you are logging to, configure it as a Linux service.
-
-          ssh -i mykey.pem ubuntu@$EC2_PUBLIC_IP "bash ~/app/deploy.sh"
-
+          # Execute the deploy.sh script on EC2
+          ssh -i mykey.pem ubuntu@${{ env.EC2_PUBLIC_IP }} "bash /home/ubuntu/app/deploy.sh"
 
