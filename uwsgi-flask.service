@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=ubuntu
 Group=ubuntu
-WorkingDirectory=<absolute-path-to-app-work-dir>
-ExecStart=<absolute-path-to-app-work-dir>/.venv/bin/uwsgi --ini uwsgi.ini
+WorkingDirectory=/home/ubuntu/app
+ExecStart=/home/ubuntu/app/venv/bin/uwsgi --ini uwsgi.ini
 Restart=always
 
 [Install]
