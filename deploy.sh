@@ -28,9 +28,9 @@ pip install -r requirements.txt
 
 # Restart the Flask app service using systemd
 sudo systemctl daemon-reload  # Reload systemd to detect changes in the service file (if any)
-sudo systemctl start NetflixMovieCatalog.service  # Replace 'NetflixMovieCatalog.service' with your actual service name
+sudo systemctl start uwsgi-flask.service  # Replace 'NetflixMovieCatalog.service' with your actual service name
 
 # Optionally, check the status of the service to ensure it's running
-sudo systemctl status NetflixMovieCatalog.service
+sudo systemctl status uwsgi-flask.service
 
 echo "Deployment completed, and the service has been restarted!"
